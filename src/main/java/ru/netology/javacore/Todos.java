@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 public class Todos {
     //...
     List<String> taskList;
-    StringBuilder stringBuilder = new StringBuilder( );
+
 
     public Todos() {
-        taskList = new ArrayList<>( );
+        taskList = new ArrayList<>();
     }
 
     public void addTask(String task) {
@@ -30,10 +30,11 @@ public class Todos {
     public String getAllTasks() {
         //...
         Collections.sort(taskList);
+        StringBuilder stringBuilder = new StringBuilder();
         for (String s : taskList) {
             stringBuilder.append(s + " ");
         }
-        return stringBuilder.toString( ).trim( );
+        return stringBuilder.toString().trim();
     }
 
 }

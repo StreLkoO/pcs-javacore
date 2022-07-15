@@ -1,24 +1,21 @@
 package ru.netology.javacore;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.json.simple.JSONArray;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.awt.*;
+
 import java.io.*;
-import java.lang.reflect.Type;
+
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLOutput;
-import java.util.*;
+
 
 public class TodoServer {
     //...
-    private int port;
-    private Todos todos;
+    private final int port;
+    private final Todos todos;
 
     public TodoServer(int port, Todos todos) {
         //...
@@ -27,21 +24,17 @@ public class TodoServer {
     }
 
     public void start() throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(port);
-             Socket socket = serverSocket.accept( );
-             PrintWriter printWriter = new PrintWriter(socket.getOutputStream( ), true);
-             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream( )))){
-        System.out.println("Starting server at " + port + "...");
-        //...
-            JSONParser jsonParser = new JSONParser( );
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Starting server at " + port + "...");
+            //...
+            JSONParser jsonParser = new JSONParser();
             while (true) {
-                if (!bufferedReader.ready( )) {
-                    break;
-                }
-                String json = bufferedReader.readLine( );
-                Object obj = jsonParser.parse(json);
-                JSONObject jsonObj = (JSONObject) obj;
-                for (int i = 0; i < jsonObj.size( ); ) {
+                try (Socket socket = serverSocket.accept();
+                     PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                    String json = bufferedReader.readLine();
+                    Object obj = jsonParser.parse(json);
+                    JSONObject jsonObj = (JSONObject) obj;
                     String typeTodos = (String) jsonObj.get("type");
                     if (typeTodos.equals("ADD")) {
                         String addTodos = (String) jsonObj.get("task");
@@ -50,13 +43,13 @@ public class TodoServer {
                         String deleteTodos = (String) jsonObj.get("task");
                         todos.removeTask(deleteTodos);
                     }
-                    i = i + 2;
+                    String s = todos.getAllTasks();
+                    printWriter.println(s);
                 }
             }
-            String s = todos.getAllTasks( );
-            printWriter.println(s);
+
         } catch (ParseException e) {
-            e.printStackTrace( );
+            e.printStackTrace();
         }
     }
 }

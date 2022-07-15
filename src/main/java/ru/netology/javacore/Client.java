@@ -15,18 +15,13 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         try (
-            Socket socket = new Socket("localhost", 8989);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                Socket socket = new Socket("localhost", 8989);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
         ) {
-           // out.println("{ \"type\": \"ADD\", \"task\": \"task #" + pickRandomChar() + "\" }");
-            out.println("{ \"type\": \"ADD\", \"task\": \"Поиграть в Dota2\" }");
-            out.println("{ \"type\": \"ADD\", \"task\": \"Выпить пивандепалы\" }");
-            out.println("{ \"type\": \"ADD\", \"task\": \"Хватит дотки пора спать\" }");
-            out.println("{ \"type\": \"DELETE\", \"task\": \"Бахнуть еще\" }");
-            out.println("{ \"type\": \"ADD\", \"task\": \"Выпить чай, индийский чай\" }");
+            out.println("{ \"type\": \"ADD\", \"task\": \"task #" + pickRandomChar() + "\" }");
 
-            System.out.println(in.readLine( ));
+            System.out.println(in.readLine());
         }
     }
 }
